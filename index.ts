@@ -1,3 +1,3 @@
-import * as example from "./src/example"
+import * as entry from "./src/entry"
 
-example.main()
+entry.main()
