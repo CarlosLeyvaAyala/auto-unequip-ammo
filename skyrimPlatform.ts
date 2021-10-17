@@ -1,0 +1,1 @@
+../../../../Steam/steamapps/common/Skyrim Special Edition/Data/Platform/Modules/skyrimPlatform.ts

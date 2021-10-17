@@ -1,2 +1,2 @@
-# auto-unequip-ammo
-Skyrim Platform plugin . Automatically (un)equips ammo on player.
+# Auto (un)equip ammo
+Skyrim Platform plugin. Automatically (un)equips ammo on player.
