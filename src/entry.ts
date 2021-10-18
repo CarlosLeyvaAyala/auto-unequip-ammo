@@ -1,14 +1,15 @@
-import {
-  printConsole,
-  on,
-  Game,
-  Form,
-  Weapon,
-  Ammo,
-  Actor,
-  EquipEvent,
-} from "skyrimPlatform"
 import * as D from "DM-Lib/Debug"
+import * as JDB from "JContainers/JDB"
+import {
+  Actor,
+  Ammo,
+  EquipEvent,
+  Form,
+  Game,
+  on,
+  printConsole,
+  Weapon,
+} from "skyrimPlatform"
 
 /** Internal name */
 // const mod_name = "easy-containers"
@@ -17,7 +18,7 @@ import * as D from "DM-Lib/Debug"
 const CLF = (logAt: D.LoggingLevel) =>
   D.CreateLoggingFunction(
     "Auto unequip ammo",
-    D.LoggingLevel.verbose,
+    D.LoggingLevel.none,
     // D.ReadLoggingFromSettings(mod_name, "loggingLevel"),
     logAt
   )
@@ -78,6 +79,8 @@ export function main() {
     DoSomething(pl, item, t)
   }
 
+  const key = ".auto-uneqip"
+
   on("equip", (e) => {
     StartAction("Object equipped", e, (_, i, t) => {
       if (t === WeaponType.ammo)
@@ -86,6 +89,7 @@ export function main() {
           (Ammo.from(i) as Ammo).getFormID(),
           D.IntToHex
         )
+      JDB.solveIntSetter(key, currentAmmo, true)
     })
   })
 
@@ -93,6 +97,7 @@ export function main() {
     StartAction("Object unequipped", e, (p, _, t) => {
       if (t === WeaponType.bow || t === WeaponType.crossbow) {
         LogI("Removing remembered ammo")
+        currentAmmo = JDB.solveInt(key, 0)
         p.unequipItem(Game.getFormEx(currentAmmo), false, true)
       }
     })
