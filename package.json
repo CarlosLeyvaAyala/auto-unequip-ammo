@@ -1,7 +1,7 @@
 {
   "name": "auto-unequip-ammo",
   "version": "1.0.0",
-  "description": "Automatically (un)equips ammo on player.",
+  "description": "Automatically unequips ammo on player.",
   "scripts": {
     "dev": "node ./tsc/before-first-compilation.js && tsc-watch --onSuccess \"node ./tsc/on-success.js\""
   },

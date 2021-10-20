@@ -104,3 +104,4 @@ dist
 .tern-port
 release/auto-unequip-ammo.js
 *.zip
+Platform/Plugins/auto-unequip-ammo.js
