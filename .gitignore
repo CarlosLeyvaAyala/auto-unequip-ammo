@@ -105,3 +105,4 @@ dist
 release/auto-unequip-ammo.js
 *.zip
 Platform/Plugins/auto-unequip-ammo.js
+*.7z

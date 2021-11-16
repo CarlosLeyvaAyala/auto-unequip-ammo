@@ -18,8 +18,8 @@
         "./node_modules/@types/chai"
       ]
     },
-    "outFile": "Platform/Plugins/auto-unequip-ammo.js",
-    "baseUrl": "F:/Steam/steamapps/common/Skyrim Special Edition/Data/Platform/Modules",
+    "outFile": "F:/Skyrim SE/MO2/overwrite/Platform/Plugins/auto-unequip-ammo.js",
+    "baseUrl": "F:\\Steam\\steamapps\\common\\Skyrim Special Edition\\Data\\Platform\\Modules",
     "rootDirs": [
       "F:/Steam/steamapps/common/Skyrim Special Edition/Data/Platform/Modules",
       "F:/Skyrim SE/MO2/mods/Auto unequip ammo-src"

@@ -1,4 +1,4 @@
-import * as D from "DM-Lib/Debug"
+import { DebugLib as D } from "DmLib"
 import * as JDB from "JContainers/JDB"
 import {
   Actor,
@@ -12,31 +12,36 @@ import {
 } from "skyrimPlatform"
 
 /** Internal name */
-// const mod_name = "easy-containers"
+const logLvl = D.Log.LevelFromSettings("auto-unequip-ammo", "loggingLevel")
+printConsole(`Auto unequip ammo logging level: ${D.Log.Level[logLvl]}`)
 
 // Generates a logging function specific to this mod.
-const CLF = (logAt: D.LoggingLevel) =>
-  D.CreateLoggingFunction(
+const CLF = (logAt: D.Log.Level) =>
+  D.Log.CreateFunction(
+    logLvl,
+    logAt,
     "Auto unequip ammo",
-    D.LoggingLevel.none,
-    // D.ReadLoggingFromSettings(mod_name, "loggingLevel"),
-    logAt
+    D.Log.ConsoleFmt,
+    D.Log.FileFmt
   )
 
 /** Logs messages intended to detect bottlenecks. */
-const LogO = CLF(D.LoggingLevel.optimization)
+const LogO = CLF(D.Log.Level.optimization)
 
 /** Logs an error message. */
-const LogE = CLF(D.LoggingLevel.error)
+const LogE = CLF(D.Log.Level.error)
 
 /** Logs detailed info meant for players to see. */
-const LogI = CLF(D.LoggingLevel.info)
+const LogI = CLF(D.Log.Level.info)
+
+/** Logs a variable while initializing it. Message level: info. */
+const LogIT = D.Log.Tap(LogI)
 
 /** Logs detailed info meant only for debugging. */
-const LogV = CLF(D.LoggingLevel.verbose)
+const LogV = CLF(D.Log.Level.verbose)
 
 /** Logs a variable while initializing it. Message level: verbose. */
-const LogVT = D.TapLog(LogV)
+const LogVT = D.Log.Tap(LogV)
 
 export function main() {
   printConsole("Auto unequip ammo successfully initalized")
@@ -74,7 +79,7 @@ export function main() {
     // Get (un)equipped object type
     const item = e.baseObj
     LogV(`${logMsg}: ${item.getName()}`)
-    const t = LogVT("Type is", GetWeaponType(item))
+    const t = LogVT("Type is", GetWeaponType(item), (t) => WeaponType[t])
 
     DoSomething(pl, item, t)
   }
@@ -84,10 +89,10 @@ export function main() {
   on("equip", (e) => {
     StartAction("Object equipped", e, (_, i, t) => {
       if (t === WeaponType.ammo)
-        currentAmmo = LogVT(
+        currentAmmo = LogIT(
           "Remembering equipped ammo",
           (Ammo.from(i) as Ammo).getFormID(),
-          D.IntToHex
+          D.Log.IntToHex
         )
       JDB.solveIntSetter(key, currentAmmo, true)
     })
@@ -96,8 +101,11 @@ export function main() {
   on("unequip", (e) => {
     StartAction("Object unequipped", e, (p, _, t) => {
       if (t === WeaponType.bow || t === WeaponType.crossbow) {
-        LogI("Removing remembered ammo")
-        currentAmmo = JDB.solveInt(key, 0)
+        currentAmmo = LogIT(
+          "Removing remembered ammo",
+          JDB.solveInt(key, 0),
+          D.Log.IntToHex
+        )
         p.unequipItem(Game.getFormEx(currentAmmo), false, true)
       }
     })
