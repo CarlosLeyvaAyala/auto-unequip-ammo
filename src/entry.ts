@@ -1,5 +1,6 @@
 import { DebugLib as D } from "DmLib"
 import * as JDB from "JContainers/JDB"
+import * as StorageUtil from "PapyrusUtil/StorageUtil"
 import {
   Actor,
   Ammo,
@@ -8,6 +9,7 @@ import {
   Game,
   on,
   printConsole,
+  SlotMask,
   Weapon,
 } from "skyrimPlatform"
 
@@ -86,27 +88,29 @@ export function main() {
 
   const key = ".auto-uneqip"
 
+  /** Log quiver movement. */
+  const LogQ = (msg: string, ammo: Form) => {
+    LogI(`${msg}: ${D.Log.IntToHex(ammo.getFormID())}`)
+  }
+
   on("equip", (e) => {
     StartAction("Object equipped", e, (_, i, t) => {
-      if (t === WeaponType.ammo)
-        currentAmmo = LogIT(
-          "Remembering equipped ammo",
-          (Ammo.from(i) as Ammo).getFormID(),
-          D.Log.IntToHex
-        )
-      JDB.solveIntSetter(key, currentAmmo, true)
+      if (t !== WeaponType.ammo) return
+      LogQ("Remembering equipped ammo", i)
+      JDB.solveFormSetter(key, i, true)
     })
   })
 
   on("unequip", (e) => {
     StartAction("Object unequipped", e, (p, _, t) => {
       if (t === WeaponType.bow || t === WeaponType.crossbow) {
-        currentAmmo = LogIT(
-          "Removing remembered ammo",
-          JDB.solveInt(key, 0),
-          D.Log.IntToHex
-        )
-        p.unequipItem(Game.getFormEx(currentAmmo), false, true)
+        const c = JDB.solveForm(key)
+        if (!c) {
+          LogE("Current ammo was lost. Did you modify esp files between saves?")
+          return
+        }
+        LogQ("Removing remembered ammo", c)
+        p.unequipItem(c, false, true)
       }
     })
   })
