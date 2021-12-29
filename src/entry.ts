@@ -152,7 +152,7 @@ function StartAction(
 ) {
   // Exit if actor isn't player
   const pl = Game.getPlayer()
-  if (e.actor.getFormID() !== pl?.getFormID()) return
+  if (!e.actor || e.actor.getFormID() !== pl?.getFormID()) return
 
   // Get (un)equipped object type
   const item = e.baseObj
