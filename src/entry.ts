@@ -1,4 +1,4 @@
-import { DebugLib as D } from "DmLib"
+import { DebugLib as D, DebugLib } from "DmLib"
 import * as JDB from "JContainers/JDB"
 import * as LibFire from "LibFire/LibFire"
 import {
@@ -28,7 +28,7 @@ const CLF = (logAt: D.Log.Level) =>
   D.Log.CreateFunction(
     logLvl,
     logAt,
-    "Auto unequip ammo",
+    "AutoUnequipAmmo",
     D.Log.ConsoleFmt,
     D.Log.FileFmt
   )
@@ -154,10 +154,22 @@ function StartAction(
   const pl = Game.getPlayer()
   if (!e.actor || e.actor.getFormID() !== pl?.getFormID()) return
 
-  // Get (un)equipped object type
   const item = e.baseObj
-  LogV(`${logMsg}: ${item.getName()}`)
+  const itemName = item.getName()
+  const itemId = item.getFormID()
+  LogV(`${logMsg}: ${itemName}. FormId: ${DebugLib.Log.IntToHex(itemId)}`)
+
+  if (IsBoundWeapon(itemName, itemId)) {
+    LogV("Bound weapon found. Nothing to do.")
+    return
+  }
+
+  // Get (un)equipped object type
   const t = LogVT("Type is", GetWeaponType(item), (t) => WAType[t])
 
   DoSomething(pl, item, t)
+}
+
+function IsBoundWeapon(itemName: string, itemId: number) {
+  return itemName.toLowerCase().includes("bound") || itemId === 0x424f8
 }

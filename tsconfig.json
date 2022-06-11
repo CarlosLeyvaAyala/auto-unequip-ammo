@@ -9,21 +9,21 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "module": "System",
-    "target": "ES2015",
+    "target": "ES2017",
     "lib": [
-      "ES2015"
+      "ES2017"
     ],
     "paths": {
+      "*": [
+        "*",
+        "F:/SteamLibrary/steamapps/common/Skyrim Special Edition/Data/Platform/Modules/*"
+      ],
       "chai": [
         "./node_modules/@types/chai"
       ]
     },
     "outFile": "F:/Skyrim SE/MO2/overwrite/Platform/Plugins/auto-unequip-ammo.js",
-    "baseUrl": "F:\\Steam\\steamapps\\common\\Skyrim Special Edition\\Data\\Platform\\Modules",
-    "rootDirs": [
-      "F:/Steam/steamapps/common/Skyrim Special Edition/Data/Platform/Modules",
-      "F:/Skyrim SE/MO2/mods/Auto unequip ammo-src"
-    ]
+    "baseUrl": "."
   },
   "include": [
     "./*.ts"

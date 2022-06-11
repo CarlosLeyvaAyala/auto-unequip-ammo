@@ -1,3 +1,5 @@
 {
-  "loggingLevel": "none"
+  "loggingLevel": "none",
+  "rememberAmmo": true,
+  "equipDelay": 0.1
 }
