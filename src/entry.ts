@@ -1,4 +1,4 @@
-import { DebugLib as D, DebugLib } from "DmLib"
+import { DebugLib as D, DebugLib, FormLib } from "DmLib"
 import * as JDB from "JContainers/JDB"
 import * as LibFire from "LibFire/LibFire"
 import {
@@ -120,7 +120,14 @@ const RestoreAmmo = (w: WAType) => {
   Wait(i, equipDelay ? 0.1 : equipDelay, (x) => {
     const a = Ammo.from(x)
     if (!a) return
-    Game.getPlayer()?.equipItem(a, false, true)
+    const p = FormLib.Player()
+    if (p.getItemCount(a) === 0) {
+      const msg =
+        "Player has not any more arrows. Let the game decide which one to use."
+      LogQ(msg, a)
+      return
+    }
+    p.equipItem(a, false, true)
   })
 }
 
